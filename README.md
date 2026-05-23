@@ -19,8 +19,8 @@ English | [中文](./README_CN.md)
 - **Precision control** — set decimal precision via `precision`, `0` for integer mode
 - **Auto formatting** — strips leading zeros and normalizes on blur (`"00123"` → `"123"`)
 - **Empty value** — when input is cleared and blurred, falls back to a default you define
-- **Input validation** — blocks non-numeric characters, multiple dots, and excess precision
-- **Ant Design native** — built on `antd.Input`, supports `small` / `middle` / `large` sizes
+- **Input validation** — regex-based validation blocks invalid characters, excess decimals, and malformed input
+- **Ant Design native** — extends `InputProps`, supports all antd.Input features out of the box
 
 ## Installation
 
@@ -49,7 +49,8 @@ function App() {
       value={value}
       onChange={setValue}
       precision={2}
-      size="middle"
+      placeholder="Enter amount"
+      disabled={false}
       emptyValue={0}
     />
   );
@@ -58,24 +59,26 @@ function App() {
 
 ## API
 
+`NumberInputProps` extends `Omit<InputProps, 'onChange' | 'onBlur' | 'value'>`, inheriting all standard antd.Input props (`size`, `placeholder`, `disabled`, `maxLength`, `className`, `style`, etc.).
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `number \| string \| null` | — | Current value |
 | `onChange` | `(value: string \| null) => void` | — | Change callback, returns string or null |
-| `precision` | `number` | `0` | Decimal precision, `0` for integer |
-| `emptyValue` | `number \| null` | `null` | Fallback value when empty on blur |
-| `size` | `"small" \| "middle" \| "large"` | `"middle"` | Input size |
+| `onBlur` | `(event: FocusEvent) => void` | — | Blur callback, fires after internal validation |
+| `precision` | `number` | `0` | Decimal precision, `0` for integer (negative values are clamped to 0) |
+| `emptyValue` | `number \| null` | `null` | Fallback value when empty / `-` / `.` on blur |
 
 ## Behavior
 
 | Scenario | Behavior |
 |----------|----------|
 | `precision={0}` | Disallows decimal point, integers only |
-| `precision={2}` | Up to 2 decimal places, truncates excess |
-| Non-numeric input | onChange is not called |
-| Multiple dots | onChange is not called |
+| `precision={2}` | Up to 2 decimal places, excess is truncated |
+| `-` or `.` input | Allowed as intermediate state (user typing negative or decimal) |
+| Invalid characters | Silently rejected, onChange not called |
 | Cleared & blurred | Falls back to `emptyValue` (default null) |
-| Blur normalization | `"00123"` → `"123"` |
+| Blur normalization | `"00123"` → `"123"`，`"abc"` → `emptyValue` |
 
 ## Development
 

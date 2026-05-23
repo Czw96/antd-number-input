@@ -18,9 +18,9 @@
 
 - **精度控制** — 通过 `precision` 设定小数位数，`0` 即为整数模式
 - **自动格式化** — 失焦时自动去除前导零、规范化数值（`"00123"` → `"123"`）
-- **回退值** — 输入框清空并失焦时，可回退到指定的默认值
-- **输入验证** — 非数字字符、多余小数点、超精度等输入会被自动拦截
-- **Ant Design 集成** — 基于 `antd.Input`，支持 `small` / `middle` / `large` 三种尺寸
+- **空值回退** — 输入框清空并失焦时，可回退到指定的默认值
+- **输入验证** — 基于正则的验证，拦截非法字符、超精度等异常输入
+- **Ant Design 集成** — 继承 `InputProps`，开箱即用所有 antd.Input 特性
 
 ## 安装
 
@@ -49,7 +49,8 @@ function App() {
       value={value}
       onChange={setValue}
       precision={2}
-      size="middle"
+      placeholder="请输入金额"
+      disabled={false}
       emptyValue={0}
     />
   );
@@ -58,13 +59,15 @@ function App() {
 
 ## API
 
+`NumberInputProps` 继承 `Omit<InputProps, 'onChange' | 'onBlur' | 'value'>`，可直接使用所有 antd.Input 标准属性（`size`、`placeholder`、`disabled`、`maxLength`、`className`、`style` 等）。
+
 | 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `value` | `number \| string \| null` | — | 当前值 |
 | `onChange` | `(value: string \| null) => void` | — | 值变化回调，返回字符串或 null |
-| `precision` | `number` | `0` | 小数精度，`0` 为整数 |
-| `emptyValue` | `number \| null` | `null` | 清空后失焦时回退到此值 |
-| `size` | `"small" \| "middle" \| "large"` | `"middle"` | 输入框尺寸 |
+| `onBlur` | `(event: FocusEvent) => void` | — | 失焦回调，在内部校验完成后触发 |
+| `precision` | `number` | `0` | 小数精度，`0` 为整数（负数会被修正为 0） |
+| `emptyValue` | `number \| null` | `null` | 清空/`-`/`.` 后失焦时的默认值 |
 
 ## 行为说明
 
@@ -72,10 +75,10 @@ function App() {
 |------|------|
 | `precision={0}` | 禁止小数点，仅允许整数 |
 | `precision={2}` | 最多 2 位小数，超出自动截断 |
-| 输入非数字 | 不触发 onChange |
-| 输入多个小数点 | 不触发 onChange |
+| 输入 `-` 或 `.` | 允许作为中间状态（用户正输入负数或小数） |
+| 输入非法字符 | 静默拦截，不触发 onChange |
 | 清空后失焦 | 回退至 `emptyValue`（默认 null） |
-| 失焦规范化 | `"00123"` → `"123"` |
+| 失焦规范化 | `"00123"` → `"123"`，`"abc"` → `emptyValue` |
 
 ## 本地开发
 
