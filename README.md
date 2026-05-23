@@ -1,73 +1,95 @@
-# React + TypeScript + Vite
+<p align="center">
+  <h1 align="center">antd-number-input</h1>
+  <p align="center">A React number input component based on Ant Design, with precision control, validation &amp; auto-formatting.</p>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <a href="https://www.npmjs.com/package/antd-number-input"><img src="https://img.shields.io/npm/v/antd-number-input" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/antd-number-input"><img src="https://img.shields.io/npm/dm/antd-number-input" alt="npm downloads" /></a>
+  <a href="https://github.com/Czw96/antd-number-input/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/antd-number-input" alt="license" /></a>
+  <a href="https://github.com/Czw96/antd-number-input"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome" /></a>
+</p>
 
-Currently, two official plugins are available:
+English | [中文](./README_CN.md)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Precision control** — set decimal precision via `precision`, `0` for integer mode
+- **Auto formatting** — strips leading zeros and normalizes on blur (`"00123"` → `"123"`)
+- **Empty value** — when input is cleared and blurred, falls back to a default you define
+- **Input validation** — blocks non-numeric characters, multiple dots, and excess precision
+- **Ant Design native** — built on `antd.Input`, supports `small` / `middle` / `large` sizes
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install antd-number-input
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Peer Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Package | Version |
+|---------|---------|
+| react | >=18.2.0 |
+| react-dom | >=18.2.0 |
+| antd | >=6.0.0 |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Usage
+
+```tsx
+import { NumberInput } from 'antd-number-input';
+
+function App() {
+  const [value, setValue] = useState<string | null>(null);
+
+  return (
+    <NumberInput
+      value={value}
+      onChange={setValue}
+      precision={2}
+      size="middle"
+      emptyValue={0}
+    />
+  );
+}
 ```
+
+## API
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number \| string \| null` | — | Current value |
+| `onChange` | `(value: string \| null) => void` | — | Change callback, returns string or null |
+| `precision` | `number` | `0` | Decimal precision, `0` for integer |
+| `emptyValue` | `number \| null` | `null` | Fallback value when empty on blur |
+| `size` | `"small" \| "middle" \| "large"` | `"middle"` | Input size |
+
+## Behavior
+
+| Scenario | Behavior |
+|----------|----------|
+| `precision={0}` | Disallows decimal point, integers only |
+| `precision={2}` | Up to 2 decimal places, truncates excess |
+| Non-numeric input | onChange is not called |
+| Multiple dots | onChange is not called |
+| Cleared & blurred | Falls back to `emptyValue` (default null) |
+| Blur normalization | `"00123"` → `"123"` |
+
+## Development
+
+```bash
+git clone https://github.com/Czw96/antd-number-input.git
+cd antd-number-input
+npm install
+
+npm run dev         # watch build
+npm run build       # production build
+npm run test        # run tests
+npm run test:watch  # watch tests
+```
+
+## License
+
+MIT © Czw96
