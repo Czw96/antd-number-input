@@ -3,24 +3,13 @@ import { Input } from "antd";
 import React, { useCallback, useMemo } from "react";
 
 export interface NumberInputProps extends Omit<InputProps, "onChange" | "value"> {
-  /** 当前值，支持 number / string / null */
-  value?: number | string | null;
-  /** 输入框为空时 onBlur 的默认值，默认 null */
-  emptyValue?: number | null;
-  /** 小数精度，默认 0（即整数） */
-  precision?: number;
-  /** 值变化回调，返回 string 或 null */
-  onChange?: (value: string | null) => void;
+  value?: number | string | null; // 当前值，支持 number / string / null
+  emptyValue?: number | null; // 输入框为空时 onBlur 的默认值，默认 null
+  precision?: number; // 小数精度，默认 0（即整数）
+  onChange?: (value: string | null) => void; // 值变化回调，返回 string 或 null
 }
 
-const NumberInput: React.FC<NumberInputProps> = ({
-  value,
-  emptyValue = null,
-  precision = 0,
-  size = "middle",
-  onChange,
-  ...restProps
-}) => {
+const NumberInput: React.FC<NumberInputProps> = ({ value, emptyValue = null, precision = 0, onChange, ...restProps }) => {
   // 确保精度为非负整数，避免无效参数
   const safePrecision = useMemo(() => {
     return Math.max(0, Math.floor(precision ?? 0));
@@ -106,7 +95,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     [inputValue, emptyValue, onChange, restProps.onBlur],
   );
 
-  return <Input value={inputValue} size={size} allowClear onChange={handleChange} onBlur={handleBlur} {...restProps} />;
+  return <Input {...restProps} value={inputValue} allowClear={true} onChange={handleChange} onBlur={handleBlur} />;
 };
 
 export default NumberInput;
