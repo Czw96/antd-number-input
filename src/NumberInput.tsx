@@ -2,18 +2,31 @@ import type { InputProps } from "antd";
 import { Input } from "antd";
 import React, { useCallback, useMemo } from "react";
 
-export interface NumberInputProps extends Omit<InputProps, "onChange" | "value"> {
+export interface NumberInputProps extends Omit<InputProps, "onChange" | "onBlur" | "value"> {
   value?: number | string | null; // 当前值，支持 number / string / null
   emptyValue?: number | null; // 输入框为空时 onBlur 的默认值，默认 null
   precision?: number; // 小数精度，默认 0（即整数）
   onChange?: (value: string | null) => void; // 值变化回调，返回 string 或 null
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void; // 失去焦点时触发的回调
 }
 
-const NumberInput: React.FC<NumberInputProps> = ({ value, emptyValue = null, precision = 0, onChange, ...restProps }) => {
+const NumberInput: React.FC<NumberInputProps> = ({
+  value,
+  emptyValue = null,
+  precision = 0,
+  onChange,
+  onBlur,
+  ...restProps
+}) => {
   // 确保精度为非负整数，避免无效参数
   const safePrecision = useMemo(() => {
     return Math.max(0, Math.floor(precision ?? 0));
   }, [precision]);
+
+  // 生成验证正则表达式
+  const validationRegex = useMemo(() => {
+    return safePrecision === 0 ? /^-?\d*$/ : new RegExp(`^-?\\d*(\\.\\d{0,${safePrecision}})?$`);
+  }, [safePrecision]);
 
   // 处理输入值，去除前导空格
   const inputValue = useMemo(() => String(value ?? "").trimStart(), [value]);
@@ -26,10 +39,9 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, emptyValue = null, pre
       // 单独的小数点也是允许的（用户正在输入小数）
       if (input === ".") return true;
       // 根据精度生成对应的正则表达式
-      const regex = safePrecision === 0 ? /^-?\d*$/ : new RegExp(`^-?\\d*(\\.\\d{0,${safePrecision}})?$`);
-      return regex.test(input);
+      return validationRegex.test(input);
     },
-    [safePrecision],
+    [validationRegex],
   );
 
   // 处理输入变化
@@ -69,30 +81,30 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, emptyValue = null, pre
   // 处理失焦事件
   const handleBlur = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
-      // 先调用用户自定义的 onBlur（如果有）
-      if (restProps.onBlur) {
-        restProps.onBlur(event);
-      }
-
       // 空值、单独负号或单独小数点时，使用 emptyValue
       if (inputValue === "" || inputValue === "-" || inputValue === ".") {
-        return onChange?.(emptyValue === null ? null : String(emptyValue));
+        onChange?.(emptyValue === null ? null : String(emptyValue));
+        return onBlur?.(event);
       }
 
       // 验证是否为有效数字
       const numValue = Number(inputValue);
       if (isNaN(numValue)) {
         // 无效输入，重置为 emptyValue
-        return onChange?.(emptyValue === null ? null : String(emptyValue));
+        onChange?.(emptyValue === null ? null : String(emptyValue));
+        return onBlur?.(event);
       }
 
       // 规范化数值（去除前导零等）
       const normalizedValue = String(numValue);
       if (inputValue !== normalizedValue) {
-        return onChange?.(normalizedValue);
+        onChange?.(normalizedValue);
+        return onBlur?.(event);
       }
+
+      onBlur?.(event);
     },
-    [inputValue, emptyValue, onChange, restProps.onBlur],
+    [inputValue, emptyValue, onChange, onBlur],
   );
 
   return <Input {...restProps} value={inputValue} allowClear={true} onChange={handleChange} onBlur={handleBlur} />;
