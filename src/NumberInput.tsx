@@ -43,7 +43,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
       // 根据精度生成对应的正则表达式
       return validationRegex.test(input);
     },
-    [validationRegex],
+    [validationRegex]
   );
 
   // 处理输入变化
@@ -77,7 +77,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         }
       }
     },
-    [onChange, validateInput, safePrecision],
+    [onChange, validateInput, safePrecision]
   );
 
   // 处理失焦事件
@@ -106,7 +106,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
       onBlur?.(event);
     },
-    [inputValue, emptyValue, onChange, onBlur],
+    [inputValue, emptyValue, onChange, onBlur]
   );
 
   return <Input {...restProps} value={inputValue} allowClear={true} onChange={handleChange} onBlur={handleBlur} />;

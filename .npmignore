@@ -5,7 +5,7 @@ node_modules/
 src/
 tsconfig.json
 vite.config.ts
-vitest.config.ts
+vite.config.preview.ts
 
 # Test files (including any accidentally built test declaration files in dist/)
 src/__tests__/
