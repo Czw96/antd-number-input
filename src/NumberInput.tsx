@@ -3,7 +3,7 @@ import { Input } from "antd";
 import React, { useCallback, useMemo } from "react";
 
 export interface NumberInputProps extends Omit<InputProps, "onChange" | "onBlur" | "value"> {
-  value?: number | string | null; // 当前值, 支持 number / string / null
+  value?: string | null; // 当前值, 支持 string / null
   emptyValue?: number | null; // 输入框为空时 onBlur 的默认值, 默认 null
   precision?: number; // 小数精度, 默认 0 (即整数)
   onChange?: (value: string | null) => void; // 值变化回调, 返回 string 或 null
@@ -29,7 +29,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   }, [safePrecision]);
 
   // 处理输入值, 去除前导空格
-  const inputValue = useMemo(() => String(value ?? "").trimStart(), [value]);
+  const inputValue = useMemo(() => (value ?? "").trimStart(), [value]);
 
   // 验证输入是否符合格式要求
   const validateInput = useCallback(

@@ -36,3 +36,8 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Demo preview
+preview/
+demo-dist/
+vite.config.preview.ts

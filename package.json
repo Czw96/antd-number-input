@@ -1,6 +1,6 @@
 {
   "name": "antd-number-input",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "A React number input component based on Ant Design, with precision control and validation",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -21,6 +21,8 @@
   "scripts": {
     "build": "npx tsc -p tsconfig.json && npx vite build",
     "dev": "npx vite build --watch",
+    "preview": "npx vite --config vite.config.preview.ts",
+    "build:preview": "npx vite build --config vite.config.preview.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepublishOnly": "npm run build"
@@ -31,19 +33,15 @@
     "react-dom": ">=18.2.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "antd": "^6.3.4",
-    "jsdom": "^29.1.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "typescript": "~6.0.2",
-    "vite": "^8.0.12",
-    "vitest": "^4.1.7"
+    "vite": "^8.0.12"
   },
   "keywords": [
     "react",

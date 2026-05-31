@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center">antd-number-input</h1>
-  <p align="center">A React number input component based on Ant Design, with precision control, validation &amp; auto-formatting.</p>
+  <p align="center">基于 Ant Design 的 React 数字输入框组件，支持精度控制、验证与自动格式化。</p>
 </p>
 
 <p align="center">
@@ -10,33 +10,43 @@
   <a href="https://github.com/Czw96/antd-number-input"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome" /></a>
 </p>
 
-English | [中文](https://github.com/Czw96/ant-number-input/blob/master/README_CN.md)
+中文 | [English](https://github.com/Czw96/antd-number-input/blob/master/README_EN.md)
 
 ---
 
-## Features
+## 特性
 
-- **Precision control** — set decimal precision via `precision`, `0` for integer mode
-- **Auto formatting** — strips leading zeros and normalizes on blur (`"00123"` → `"123"`)
-- **Empty value** — when input is cleared and blurred, falls back to a default you define
-- **Input validation** — regex-based validation blocks invalid characters, excess decimals, and malformed input
-- **Ant Design native** — extends `InputProps`, supports all antd.Input features out of the box
+- **精度控制** — 通过 `precision` 设定小数位数，`0` 即为整数模式
+- **自动格式化** — 失焦时自动去除前导零、规范化数值（`"00123"` → `"123"`）
+- **空值回退** — 输入框清空并失焦时，可回退到指定的默认值
+- **输入验证** — 基于正则的验证，拦截非法字符、超精度等异常输入
+- **Ant Design 集成** — 继承 `InputProps`，开箱即用所有 antd.Input 特性
 
-## Installation
+## 安装
 
 ```bash
 npm install antd-number-input
 ```
 
-## Peer Dependencies
+## 在线演示
 
-| Package | Version |
-|---------|---------|
+[antd-number-input demo](https://demo.29dev.cn/antd-number-input)
+
+本地启动预览：
+
+```bash
+npm run preview
+```
+
+## 依赖要求
+
+| 依赖 | 版本 |
+|------|------|
 | react | >=18.2.0 |
 | react-dom | >=18.2.0 |
 | antd | >=6.0.0 |
 
-## Usage
+## 使用示例
 
 ```tsx
 import { NumberInput } from 'antd-number-input';
@@ -49,7 +59,7 @@ function App() {
       value={value}
       onChange={setValue}
       precision={2}
-      placeholder="Enter amount"
+      placeholder="请输入金额"
       disabled={false}
       emptyValue={0}
     />
@@ -59,40 +69,40 @@ function App() {
 
 ## API
 
-`NumberInputProps` extends `Omit<InputProps, 'onChange' | 'onBlur' | 'value'>`, inheriting all standard antd.Input props (`size`, `placeholder`, `disabled`, `maxLength`, `className`, `style`, etc.).
+`NumberInputProps` 继承 `Omit<InputProps, 'onChange' | 'onBlur' | 'value'>`，可直接使用所有 antd.Input 标准属性（`size`、`placeholder`、`disabled`、`maxLength`、`className`、`style` 等）。
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `number \| string \| null` | — | Current value |
-| `onChange` | `(value: string \| null) => void` | — | Change callback, returns string or null |
-| `onBlur` | `(event: FocusEvent) => void` | — | Blur callback, fires after internal validation |
-| `precision` | `number` | `0` | Decimal precision, `0` for integer (negative values are clamped to 0) |
-| `emptyValue` | `number \| null` | `null` | Fallback value when empty / `-` / `.` on blur |
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `value` | `string \| null` | — | 当前值 |
+| `onChange` | `(value: string \| null) => void` | — | 值变化回调，返回字符串或 null |
+| `onBlur` | `(event: React.FocusEvent<HTMLInputElement>) => void` | — | 失焦回调，在内部校验完成后触发 |
+| `precision` | `number` | `0` | 小数精度，`0` 为整数，负数会被修正为 0 |
+| `emptyValue` | `number \| null` | `null` | 清空/`-`/`.` 后失焦时的默认值 |
 
-## Behavior
+## 行为说明
 
-| Scenario | Behavior |
-|----------|----------|
-| `precision={0}` | Disallows decimal point, integers only |
-| `precision={2}` | Up to 2 decimal places, excess is truncated |
-| `-` or `.` input | Allowed as intermediate state (user typing negative or decimal) |
-| Invalid characters | Silently rejected, onChange not called |
-| Cleared & blurred | Falls back to `emptyValue` (default null) |
-| Blur normalization | `"00123"` → `"123"`，`"abc"` → `emptyValue` |
+| 场景 | 行为 |
+|------|------|
+| `precision={0}` | 禁止小数点，仅允许整数 |
+| `precision={2}` | 最多 2 位小数，超出自动截断 |
+| `precision` 为负 | 自动修正为 0 |
+| 输入 `-` 或 `.` | 允许作为中间状态（用户正输入负数或小数） |
+| 输入前导空格 | 自动去除 |
+| 输入非法字符 | 静默拦截，不触发 onChange |
+| 清空后失焦 | 回退至 `emptyValue`（默认 null） |
+| 失焦规范化 | `"00123"` → `"123"`，`"abc"` → `emptyValue` |
 
-## Development
+## 本地开发
 
 ```bash
 git clone https://github.com/Czw96/antd-number-input.git
 cd antd-number-input
 npm install
 
-npm run dev         # watch build
-npm run build       # production build
-npm run test        # run tests
-npm run test:watch  # watch tests
+npm run dev    # 监听构建
+npm run build  # 生产构建
 ```
 
-## License
+## 许可证
 
 MIT © Czw96
