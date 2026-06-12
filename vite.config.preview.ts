@@ -9,6 +9,6 @@ export default defineConfig({
     open: true,
   },
   build: {
-    outDir: "../demo-dist",
+    outDir: "/var/www/demo.29dev.cn/antd-number-input",
   },
 });
