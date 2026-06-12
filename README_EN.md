@@ -30,7 +30,7 @@ npm install antd-number-input
 
 ## Demo
 
-[Online demo](https://demo.29dev.cn/antd-number-input)
+[Online demo](https://demo.29dev.cn/antd-number-input/)
 
 Run locally:
 
