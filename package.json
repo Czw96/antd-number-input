@@ -1,7 +1,7 @@
 {
   "name": "antd-number-input",
   "type": "module",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "A React number input component based on Ant Design, with precision control and validation",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
